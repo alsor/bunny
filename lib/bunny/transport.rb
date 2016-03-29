@@ -253,9 +253,7 @@ module Bunny
 
       # 2) the size is OK, but the string doesn't end with FINAL_OCTET
       if frame_end != AMQ::Protocol::Frame::FINAL_OCTET
-        path = Rails.root.join("log/bad-frame-#{Time.now.strftime("%Y%m%d")}-#{$$}-#{rand(0x100000000).to_s(36)}")
-        File.open(path, 'wb') { |f| f.write(payload) }
-        Rails.logger.error("AMQP bad frame. type: #{type.inspect}, channel: #{channel.inspect}, size: #{size}, payload saved to: #{path} on #{Socket.gethostname}")
+        Rails.logger.error("AMQP bad frame. type: #{type.inspect}, channel: #{channel.inspect}, size: #{size}, payload: #{Base64.strict_encode64(payload)}")
         raise NoFinalOctetError.new
       end
       AMQ::Protocol::Frame.new(type, payload, channel)
