@@ -253,7 +253,7 @@ module Bunny
 
       # 2) the size is OK, but the string doesn't end with FINAL_OCTET
       if frame_end != AMQ::Protocol::Frame::FINAL_OCTET
-        @logger.error("AMQP bad frame. type: #{type.inspect}, channel: #{channel.inspect}, size: #{size}, payload: #{Base64.strict_encode64(payload)}")
+        @logger.error("AMQP bad frame. type: #{type.inspect}, channel: #{channel.inspect}, size: #{size}, frame_end: #{frame_end.inspect}, payload: #{Base64.strict_encode64(payload)}")
         raise NoFinalOctetError.new
       end
       AMQ::Protocol::Frame.new(type, payload, channel)
