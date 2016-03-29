@@ -255,7 +255,7 @@ module Bunny
       if frame_end != AMQ::Protocol::Frame::FINAL_OCTET
         path = Rails.root.join("log/bad-frame-#{Time.now.strftime("%Y%m%d")}-#{$$}-#{rand(0x100000000).to_s(36)}")
         File.open(path, 'wb') { |f| f.write(payload) }
-        Rails.logger.error("AMQP bad frame. type: #{type.inspect}, channel: #{channel.inspect}, size: #{size}, payload saved to: #{path}")
+        Rails.logger.error("AMQP bad frame. type: #{type.inspect}, channel: #{channel.inspect}, size: #{size}, payload saved to: #{path} on #{Socket.gethostname}")
         raise NoFinalOctetError.new
       end
       AMQ::Protocol::Frame.new(type, payload, channel)
