@@ -243,8 +243,12 @@ module Bunny
       #                         puts "Got AMQ::Protocol::EmptyResponseError, header is #{header.inspect}"
       #                       end
       type, channel, size = AMQ::Protocol::Frame.decode_header(header)
+      if type == :heartbeat
+        @logger.info("heartbeat received")
+      end
       payload   = read_fully(size)
       frame_end = read_fully(1)
+
 
       # 1) the size is miscalculated
       if payload.bytesize != size
